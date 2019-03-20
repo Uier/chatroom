@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSIE111 Chatroom</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript">
+        var name = prompt("Nickname: ");
+        var socket = io();
+        document.cookie = name;
+    </script>
+</head>
+<body>
+    <p id="title">Welcome to online chatroom for NTNU CSIE 111</p>
+    <div class=row>
+        <div class="column">
+            <div id="status-box">Server: <span id="status">-</span> / online users:<span id="online">0</span></div>
+            <div id="content"></div>
+        </div>
+        <div class="column">
+            <div id="status-box"><span>Chatroom / user: </span><span id=getname><script>document.write(name)</script></span></div>
+            <div id="send-box">
+                <form id="send-form">
+                    <textarea name="msg" id="msg" placeholder="說點什麼？"></textarea>
+                    <input type="submit" value="Enter">
+                </form>
+                <script src="autosize.min.js"></script>
+                <script>
+                    autosize(document.getElementById("msg"));
+                </script>
+                <p>發送快捷鍵：CTRL + ENTER</p>
+            </div>
+        </div>
+    </div>
+    
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", () => {
+ 
+            var status = document.getElementById("status");
+            var online = document.getElementById("online");
+            var sendForm = document.getElementById("send-form");
+            var content = document.getElementById("content");
+           
+            window.setInterval(function() {
+                content.scrollTop = content.scrollHeight;
+            });
+
+            socket.on("connect", function() {
+                status.innerText = "Connected.";
+            });
+ 
+            socket.on("disconnect", function() {
+                status.innerText = "Disconnected.";
+            });
+ 
+            socket.on("online", function(amount) {
+                online.innerText = amount;
+            });
+
+            function submitform(e) {
+                e.preventDefault();
+
+                var formData = {};
+                var formChild = sendForm.children;
+
+                for ( var i=0; i<sendForm.childElementCount; ++i ) {
+                    var child = formChild[i];
+                    if ( child.name !== "" ) {
+                        formData[child.name] = child.value;
+                    }
+                }
+                socket.emit("send", formData);
+            }
+
+            sendForm.addEventListener("submit", submitform);
+
+            $("form").keydown(function(event) {
+                if ( event.ctrlKey && event.keyCode === 13 ) {
+                    submitform(event);
+                }
+            });
+
+            socket.on("msg", function(e) {
+            	var msgBox = document.createElement("div");
+        		msgBox.className = "msg";
+            	var msg = document.createTextNode(e.msg);
+                $("#msg").val('');
+                // var nam = document.createTextNode(document.getElementById("getname").innerText+": ");
+                var nam = document.createTextNode("####"+document.cookie+": \n");
+                console.log('msg received -> ' + nam + ': ' + msg);
+                msgBox.appendChild(nam);
+            	msgBox.appendChild(msg);
+            	content.appendChild(msgBox);
+            });
+        });
+    </script>
+</body>
+</html>
