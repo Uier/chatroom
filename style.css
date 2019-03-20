@@ -39,6 +39,7 @@ html, body {
     border-color: #27BBB2;
     border-radius: 5px;
     overflow: auto;
+    white-space: pre-wrap;
 }
 
 #send-box {
@@ -58,11 +59,12 @@ textarea {
     max-height: 450px;
 }
 
-#msg {
-    width: 100%;
+#user {
+    color: #F5EAFF;
 }
 
-.msg {
+#msg {
+    width: 100%;
     white-space: pre;
     display: block;
 }

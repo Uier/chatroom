@@ -10,90 +10,61 @@
     <script type="text/javascript">
         var name = prompt("Nickname: ");
         var socket = io();
-        document.cookie = name;
     </script>
 </head>
 <body>
-    <p id="title">Welcome to online chatroom for NTNU CSIE 111</p>
+    <p id="title">Welcome to NTNU_CSIE_111 online chatroom</p>
     <div class=row>
         <div class="column">
             <div id="status-box">Server: <span id="status">-</span> / online users:<span id="online">0</span></div>
             <div id="content"></div>
         </div>
         <div class="column">
-            <div id="status-box"><span>Chatroom / user: </span><span id=getname><script>document.write(name)</script></span></div>
+            <div id="status-box"><span>Chatroom / user: </span><span id=Nickname></span></div>
             <div id="send-box">
-                <form id="send-form">
-                    <textarea name="msg" id="msg" placeholder="說點什麼？"></textarea>
-                    <input type="submit" value="Enter">
+                <form>
+                    <textarea id="msg" placeholder="說點什麼？"></textarea>
+                    <input type="button" value="Enter" onclick="submitform(this);">
                 </form>
                 <script src="autosize.min.js"></script>
-                <script>
-                    autosize(document.getElementById("msg"));
-                </script>
+                <script>autosize(document.getElementById("msg"));</script>
                 <p>發送快捷鍵：CTRL + ENTER</p>
             </div>
         </div>
     </div>
     
-    <script type="text/javascript">
-        document.addEventListener("DOMContentLoaded", () => {
- 
-            var status = document.getElementById("status");
-            var online = document.getElementById("online");
-            var sendForm = document.getElementById("send-form");
-            var content = document.getElementById("content");
-           
+    <script>
+        $(document).ready(function() {
             window.setInterval(function() {
                 content.scrollTop = content.scrollHeight;
             });
 
             socket.on("connect", function() {
-                status.innerText = "Connected.";
+                $("#status").text("Connected");
+                $("#Nickname").text(name);
             });
  
             socket.on("disconnect", function() {
-                status.innerText = "Disconnected.";
+               	$("#status").text("Disconnected");
             });
  
             socket.on("online", function(amount) {
-                online.innerText = amount;
+                $("#online").text(amount);
             });
 
-            function submitform(e) {
+            function submit(e) {
                 e.preventDefault();
-
-                var formData = {};
-                var formChild = sendForm.children;
-
-                for ( var i=0; i<sendForm.childElementCount; ++i ) {
-                    var child = formChild[i];
-                    if ( child.name !== "" ) {
-                        formData[child.name] = child.value;
-                    }
-                }
-                socket.emit("send", formData);
+                $("#content").append("<div id=user>"+name+":</div>");
+            	$("#content").append("<div>"+$("#msg").val()+"</div>");
+                $("#msg").val('');
             }
 
-            sendForm.addEventListener("submit", submitform);
+            // $("button").click(() => submit());
 
-            $("form").keydown(function(event) {
-                if ( event.ctrlKey && event.keyCode === 13 ) {
-                    submitform(event);
+            $("form").keydown(function(e) {
+                if ( e.ctrlKey && e.keyCode === 13 ) {
+                    submit(e);
                 }
-            });
-
-            socket.on("msg", function(e) {
-            	var msgBox = document.createElement("div");
-        		msgBox.className = "msg";
-            	var msg = document.createTextNode(e.msg);
-                $("#msg").val('');
-                // var nam = document.createTextNode(document.getElementById("getname").innerText+": ");
-                var nam = document.createTextNode("####"+document.cookie+": \n");
-                console.log('msg received -> ' + nam + ': ' + msg);
-                msgBox.appendChild(nam);
-            	msgBox.appendChild(msg);
-            	content.appendChild(msgBox);
             });
         });
     </script>

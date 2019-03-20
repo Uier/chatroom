@@ -17,10 +17,6 @@ io.on('connection', (socket) => {
 		onlineCount = (onlineCount < 0 ? 0 : onlineCount-1);
 		io.emit("online", onlineCount);
 	});
-
-	socket.on('send', (msg) => {
-		io.emit("msg", msg);
-	});
 });
 
 server.listen(8888, () => {
