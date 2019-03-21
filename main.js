@@ -19,6 +19,6 @@ io.on('connection', (socket) => {
 	});
 });
 
-server.listen(8888, () => {
+server.listen(443, () => {
 	console.log('server started');
 });
