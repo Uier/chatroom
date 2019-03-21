@@ -25,5 +25,5 @@ io.on('connection', (socket) => {
 });
 
 server.listen(443, () => {
-	console.log('server started');
+	console.log('link start');
 });

@@ -18,9 +18,6 @@ document.addEventListener("DOMContentLoaded", function() {
         e.preventDefault();
         var content = "<div id=user>"+name+":</div><div>"+$("textarea").val()+"</div>";
         console.log("send: "+name+": "+$("textarea").val());
-     //    $("#content").append("<div id=user>"+name+":</div>");
-    	// $("#content").append("<div>"+$("textarea").val()+"</div>");
-        $("#content").scrollTop($("#content").prop("scrollHeight"));
         socket.emit("send", content);
         $("textarea").val('');
         $("textarea").height(30);
@@ -28,6 +25,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     socket.on("msg", function(content) {
     	$("#content").append(content);
+	$("#content").scrollTop($("#content").prop("scrollHeight"));
     });
 
     $("textarea").on("keydown", function(e) {

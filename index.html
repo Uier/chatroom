@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSIE111 Chatroom</title>
+    <title>Normal Chatroom</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-	<script src="autosize.min.js"></script>
+    <script src="autosize.min.js"></script>
     <script src="teshi.js"></script>
     <script>var socket = io();</script>
 </head>
@@ -24,7 +24,7 @@
 	        <div class="col-6">
 	            <form><textarea id="msg" placeholder="說點什麼？"></textarea></form>
 				<script>autosize(document.getElementById("msg"));</script>
-	            <div style="text-align: right;">發送快捷鍵：CTRL + ENTER <button class="btn btn-primary">送出</button></div>
+	            <div style="text-align: right;">送出快捷鍵：CTRL + ENTER <button class="btn btn-primary">送出</button></div>
 	        </div>
 	    </div>
     </div>
