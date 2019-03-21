@@ -4,69 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CSIE111 Chatroom</title>
-    <script src="/socket.io/socket.io.js"></script>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript">
-        var name = prompt("Nickname: ");
-        var socket = io();
-    </script>
+	<script src="autosize.min.js"></script>
+    <script src="teshi.js"></script>
+    <script>var socket = io();</script>
 </head>
 <body>
-    <p id="title">Welcome to NTNU_CSIE_111 online chatroom</p>
-    <div class=row>
-        <div class="column">
-            <div id="status-box">Server: <span id="status">-</span> / online users:<span id="online">0</span></div>
-            <div id="content"></div>
-        </div>
-        <div class="column">
-            <div id="status-box"><span>Chatroom / user: </span><span id=Nickname></span></div>
-            <div id="send-box">
-                <form>
-                    <textarea id="msg" placeholder="說點什麼？"></textarea>
-                    <input type="button" value="Enter" onclick="submitform(this);">
-                </form>
-                <script src="autosize.min.js"></script>
-                <script>autosize(document.getElementById("msg"));</script>
-                <p>發送快捷鍵：CTRL + ENTER</p>
-            </div>
-        </div>
+	<div class="container-fluid vertical-center">
+	    <h1>Welcome to NTNU_CSIE_111 online chatroom</h1>
+	    <div class="row">
+		    <div class="col-6" id="status-box">Server: <span id="status">-</span> / online users:<span id="online">0</span></div>
+		    <div class="col-6" id="status-box"><span>Chatroom / user: </span><span id=user></span></div>
+		</div>
+	    <div class="row">
+	        <div class="col-6" id="content"></div>
+	        <div class="col-6">
+	            <form><textarea id="msg" placeholder="說點什麼？"></textarea></form>
+				<script>autosize(document.getElementById("msg"));</script>
+	            <div style="text-align: right;">發送快捷鍵：CTRL + ENTER <button class="btn btn-primary">送出</button></div>
+	        </div>
+	    </div>
     </div>
-    
-    <script>
-        $(document).ready(function() {
-            window.setInterval(function() {
-                content.scrollTop = content.scrollHeight;
-            });
-
-            socket.on("connect", function() {
-                $("#status").text("Connected");
-                $("#Nickname").text(name);
-            });
- 
-            socket.on("disconnect", function() {
-               	$("#status").text("Disconnected");
-            });
- 
-            socket.on("online", function(amount) {
-                $("#online").text(amount);
-            });
-
-            function submit(e) {
-                e.preventDefault();
-                $("#content").append("<div id=user>"+name+":</div>");
-            	$("#content").append("<div>"+$("#msg").val()+"</div>");
-                $("#msg").val('');
-            }
-
-            // $("button").click(() => submit());
-
-            $("form").keydown(function(e) {
-                if ( e.ctrlKey && e.keyCode === 13 ) {
-                    submit(e);
-                }
-            });
-        });
-    </script>
 </body>
 </html>
